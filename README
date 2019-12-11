@@ -1,0 +1,18 @@
+TODO
+
+Use a cache for holding previous calculated matchings, possibly an LRU cache.
+Maybe use python implementation of LRU. (See: @functools.lru_cache(user_function) )
+or Redis.
+
+Another possible solution is to pre-calculate the matching for each company and hold the
+matching company id and the match score.
+
+If a ‘new company’ comes along that is not in companies list calculate the result on the fly and
+save the company name and id for future recalculations of data set
+However this solution will ‘work’ only if threshold provided<=match_score
+otherwise will need calculate on the fly.
+Might also put the companies data in external storage/database (Example: S3 files/Postgres table
+etc.) and read the data by chunks.
+
+Another alternative is to push input data as a temporary table to database and calculate result
+directly on database using a complex SQL query.
