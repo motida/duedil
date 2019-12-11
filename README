@@ -1,3 +1,56 @@
+Task:
+
+Company matching is a core problem at Abracadabra that powers a lot of its products and
+services. It involves taking sparse company information that a user provides,
+matching it to companies in our database, and returning back the dataset with
+enriched information such as financial data, industry keywords, addresses and a lot
+more. Users can then use this new information to perform granular segmentation of
+their customers for instance, or run checks on companies, and they can ultimately
+export this data for their own use in other systems.
+Your task is to build an API in Python or Scala to take a set of user provided
+records and match them to the set of companies in our database, and return a
+dataset with two extra fields, the matched company name (if any) and the
+matched company ID (if any). You are provided with ‘companies.csv’ with 10k
+rows, which represents a sample of our internal database of companies, and
+‘sample_user_records.csv` as an example of user provided input. The matching
+process may take some time, and therefore, the user must have the ability to track
+the process and retrieve the final dataset once the matching is over.
+Entity matching is a fairly involved process, but for this task, we will provide you a
+simple name matching method using the Jaccard index, provided in `match.py`. You
+are not required to modify this method for the purposes of this exercise. We
+also provide an equivalent Scala implementation in `match.scala`. The return type in
+the Scala implementation is slightly different than the Python method keeping with
+Scala standard practise of using case classes and Option data types to specify a
+return type that could be empty, but feel free to modify either the Python or Scala
+method signatures to suit your preferences.
+As a list of core requirements, we would like the solution to be able to:
+1. Accept an input CSV dataset
+The API should accept a CSV dataset containing two fields, id and name. See
+sample_user_records.csv for an example user submitted CSV dataset.
+2. Allow the user to specify a matching threshold
+The user should also be able to specify how strict or lenient they would like their
+matched results to be. The matching function provided takes in a threshold, a value
+between 0.0 and 1.0 inclusive.
+3. Match user data to companies asynchronously
+The matching processing can take some time, especially as the companies database
+(see companies.csv) grows larger. The service must pass datasets through the
+matching process while also accepting new datasets provided by other users.
+4. Track the status of a particular uploaded dataset
+Once a dataset has been uploaded, the user must be able to fetch its status. ‘IN
+PROGRESS’ and ‘COMPLETED’ could be two possible states, but there could be
+more or less, depending on your implementation. The user should be able to also
+fetch more granular stats on record matching progress. Counts of ‘IN PROGRESS’
+and ‘COMPLETED’ records are two obvious stats to compute, but feel free to think of
+any others that are relevant given the nature of the problem.
+5. Download the enriched dataset when it’s ready
+Once the matching is complete, the user should be able to retrieve the dataset with
+the two new columns, matched_company and matched_company_id, possibly
+(but not necessarily) through a GET endpoint. The match columns should be empty
+for rows where no match was found above the supplied threshold. The original CSV
+columns, the ordering of those columns as well as the ordering of rows must be
+preserved.
+
+
 TODO
 
 Use a cache for holding previous calculated matchings, possibly an LRU cache.
